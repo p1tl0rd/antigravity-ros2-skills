@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "ros2-docs": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/opt/ros/humble/share/doc"],
+      "description": "Truy cập tài liệu ROS 2 Humble cài đặt cục bộ."
+    },
+    "project-context": {
+      "command": "python3",
+      "args": ["src/tools/context_provider.py"],
+      "description": "Cung cấp ngữ cảnh về đồ thị Node và Topics hiện tại."
+    }
+  }
+}
