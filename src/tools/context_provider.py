@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
+# Copyright 2026 Antigravity
 import sys
-import asyncio
 import json
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 
 try:
     import rclpy
@@ -14,66 +14,84 @@ except ImportError:
 try:
     from mcp.server.fastmcp import FastMCP
 except ImportError:
-    # Fallback or error if mcp is not installed
-    # We will just print a helpful message to stderr and start a dummy server or exit
     sys.stderr.write("Error: 'mcp' python package not found. Please install it with: pip install mcp\n")
     sys.exit(1)
 
-# Initialize FastMCP Server
-mcp_server = FastMCP("ros2_context_provider")
 
-def get_ros_graph_info() -> Dict[str, Any]:
-    """Helper to query ROS 2 graph using a temporary node."""
-    rclpy.init(args=None)
-    node = rclpy.create_node('_agent_context_scanner')
-    
-    try:
+class ROS2GraphScanner:
+    """Encapsulates interaction with the ROS 2 Daemon to query graph info."""
+
+    def __init__(self, node_name: str = '_agent_context_scanner'):
+        self.node_name = node_name
+
+    def scan(self) -> Dict[str, Any]:
+        """Initializes a temp node, queries graph, and shuts down."""
+        rclpy.init(args=None)
+        node = rclpy.create_node(self.node_name)
+        
+        try:
+            return self._query_node_api(node)
+        finally:
+            node.destroy_node()
+            rclpy.shutdown()
+
+    def _query_node_api(self, node: Node) -> Dict[str, Any]:
+        """Internal method to extract data from the node API."""
         node_names = node.get_node_names_and_namespaces()
         topic_names_and_types = node.get_topic_names_and_types()
         service_names_and_types = node.get_service_names_and_types()
         
-        nodes_info = []
-        for name, namespace in node_names:
-            full_name = f"{namespace}/{name}".replace("//", "/")
-            nodes_info.append({"name": name, "namespace": namespace, "full_name": full_name})
-
-        topics_info = []
-        for name, types in topic_names_and_types:
-            topics_info.append({"name": name, "types": types})
-
-        services_info = []
-        for name, types in service_names_and_types:
-            services_info.append({"name": name, "types": types})
-
         return {
-            "nodes": nodes_info,
-            "topics": topics_info,
-            "services": services_info
+            "nodes": [
+                {"name": name, "namespace": ns, "full_name": f"{ns}/{name}".replace("//", "/")}
+                for name, ns in node_names
+            ],
+            "topics": [
+                {"name": name, "types": types}
+                for name, types in topic_names_and_types
+            ],
+            "services": [
+                {"name": name, "types": types}
+                for name, types in service_names_and_types
+            ]
         }
-    finally:
-        node.destroy_node()
-        rclpy.shutdown()
 
-@mcp_server.resource("ros2://graph")
-def get_graph() -> str:
-    """Returns the current ROS 2 graph (nodes, topics, services) as JSON."""
-    try:
-        data = get_ros_graph_info()
-        return json.dumps(data, indent=2)
-    except Exception as e:
-        return json.dumps({"error": str(e)})
 
-@mcp_server.tool()
-def list_nodes() -> str:
-    """Lists all active ROS 2 nodes."""
-    graph = get_ros_graph_info()
-    return json.dumps(graph["nodes"], indent=2)
+class ROS2ContextServer:
+    """Wraps the FastMCP server and exposes ROS 2 capabilities."""
 
-@mcp_server.tool()
-def list_topics() -> str:
-    """Lists all active ROS 2 topics."""
-    graph = get_ros_graph_info()
-    return json.dumps(graph["topics"], indent=2)
+    def __init__(self, server_name: str = "ros2_context_provider"):
+        self.server = FastMCP(server_name)
+        self.scanner = ROS2GraphScanner()
+        
+        # Register resources and tools
+        self.server.resource("ros2://graph")(self.get_graph)
+        self.server.tool()(self.list_nodes)
+        self.server.tool()(self.list_topics)
+
+    def get_graph(self) -> str:
+        """Resource: Returns the current ROS 2 graph (nodes, topics, services)."""
+        try:
+            data = self.scanner.scan()
+            return json.dumps(data, indent=2)
+        except Exception as e:
+            return json.dumps({"error": str(e)})
+
+    def list_nodes(self) -> str:
+        """Tool: Lists all active ROS 2 nodes."""
+        graph = self.scanner.scan()
+        return json.dumps(graph["nodes"], indent=2)
+
+    def list_topics(self) -> str:
+        """Tool: Lists all active ROS 2 topics."""
+        graph = self.scanner.scan()
+        return json.dumps(graph["topics"], indent=2)
+
+    def run(self):
+        """Starts the MCP server."""
+        self.server.run()
+
 
 if __name__ == "__main__":
-    mcp_server.run()
+    app = ROS2ContextServer()
+    app.run()
