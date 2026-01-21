@@ -11,24 +11,28 @@ __pycache__/
 .pytest_cache/
 .venv/
 env/
+.mypy_cache/
 
 # IDE
 .vscode/
 .idea/
 
 # Antigravity User Specific
-# We WANT to track .agent, but maybe not some internal state if any
-# For this repo, we track everything in .agent
+# We WANT to track .agent, but NOT .agent1 (backup/source folder)
+.agent1/
 
-# User Code (Don't track actual ROS 2 packages created by user, except tools and templates)
+# User Code (Don't track actual ROS 2 packages created by user)
 src/*
 !src/tools/
 !src/tools/setup_linter.py
 !src/tools/context_provider.py
 
-# GeneratedConfigFiles (Track these as templates or let setup script generate them? 
-# Let's ignore setup.cfg per-package but track the root .clang-format)
+# Generated Config Files (These should be generated per-package by setup_linter.py)
+setup.cfg
 
+# Test Artifacts (Don't need in repo)
+TEST_STRATEGY.md
 
 # System
 .DS_Store
+Thumbs.db
