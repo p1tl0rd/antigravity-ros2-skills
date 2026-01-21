@@ -18,7 +18,14 @@ Khác với chuẩn Google thuần túy, ROS 2 áp dụng các ngoại lệ sau 
 | Biến Thành Viên | snake_case + _ | `publisher_` |
 | Biến Toàn Cục | g_ + snake_case | `g_shutdown_signal` |
 
-## 2. Quản Lý Bộ Nhớ & Con Trỏ
+## 2. Thiết Kế Hướng Đối Tượng (OOP & Composition)
+*   **Component-Based**: Mọi Node C++ phải được thiết kế dưới dạng `Component` (Shared Library) kế thừa từ `rclcpp::Node` hoặc `rclcpp_lifecycle::LifecycleNode`.
+*   **Encapsulation**: 
+    *   Thành viên dữ liệu (Data Members) phải là `private` và có hậu tố `_` (ví dụ: `timer_`).
+    *   Chỉ expose các phương thức cần thiết qua `public`.
+*   **Macro Registration**: Phải sử dụng `RCLCPP_COMPONENTS_REGISTER_NODE` để đăng ký Class vào Executor, tránh viết hàm `main()` cứng trong file component.
+
+## 3. Quản Lý Bộ Nhớ & Con Trỏ
 *   Tuyệt đối không sử dụng `new` và `delete` thủ công (Raw Pointers) trừ khi tương tác với thư viện C legacy.
 *   Sử dụng `std::shared_ptr` và `std::unique_ptr` cho việc quản lý tài nguyên.
 *   Khi tạo Node hoặc Message, ưu tiên `rclcpp::make_shared<T>()` để đảm bảo tương thích với bộ cấp phát bộ nhớ của middleware.
