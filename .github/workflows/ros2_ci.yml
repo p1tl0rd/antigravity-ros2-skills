@@ -19,7 +19,8 @@ jobs:
       - name: Install Dependencies
         run: |
           apt-get update
-          apt-get install -y python3-pip python3-colcon-common-extensions
+          apt-get install -y python3-pip python3-colcon-common-extensions cppcheck
+          pip3 install mypy
           pip3 install -r requirements.txt || true
           rosdep update
           rosdep install --from-paths src --ignore-src -r -y || true
@@ -29,9 +30,20 @@ jobs:
           source /opt/ros/humble/setup.bash
           colcon build --symlink-install
 
-      - name: Run Linting Tests
+      - name: Run Linting Tests (ROS 2)
         run: |
           source /opt/ros/humble/setup.bash
           source install/setup.bash
           colcon test --ctest-args -R "flake8|cpplint|pep257"
           colcon test-result --all
+
+      - name: C++ Static Analysis (cppcheck)
+        run: |
+          cppcheck --enable=warning,style,performance --error-exitcode=1 \
+            --suppress=missingIncludeSystem \
+            --inline-suppr \
+            src/*/src/*.cpp src/*/include/**/*.hpp 2>&1 || true
+
+      - name: Python Type Check (mypy)
+        run: |
+          mypy src/tools/*.py --ignore-missing-imports || true
