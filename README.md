@@ -1,39 +1,73 @@
-# Antigravity ROS 2 Skills Setup
+# Antigravity ROS 2 Skills
 
-Bộ cấu hình "Agent-First" biến IDE của bạn thành một môi trường phát triển Robot chuyên nghiệp với Google Antigravity.
+🚀 Bộ cấu hình "Agent-First" biến IDE của bạn thành môi trường phát triển Robot chuyên nghiệp với AI Agents.
 
-## Installation
+## 📦 Nội Dung
 
-1.  **Clone repository này vào thư mục gốc của ROS 2 Workspace:**
-    ```bash
-    cd ~/my_ros2_ws
-    git clone https://github.com/p1tl0rd/antigravity-ros2-skills.git .
-    ```
+```
+.agent/
+├── rules/           # Quy tắc code style (C++, Python, Technical)
+├── skills/          # Kỹ năng chuyên biệt (ROS Expert, Code Review, Git...)
+└── workflows/       # Quy trình làm việc chuẩn (CI, Clean Init, Universal...)
 
-2.  **Cài đặt Dependencies:**
-    ```bash
-    pip install -r requirements.txt
-    ```
+src/tools/           # Script hỗ trợ (Linter setup, Context Provider)
+.github/workflows/   # GitHub Actions CI/CD
+```
 
-3.  **Khởi tạo Linter Configs:**
-    ```bash
-    python3 src/tools/setup_linter.py
-    ```
-    *(Lệnh này sẽ tạo ra `setup.cfg` và `.clang-format` chuẩn).*
+## 🔧 Cài Đặt
 
-4.  **Cài đặt ROS 2 Dependencies:**
-    ```bash
-    rosdep install --from-paths src --ignore-src -r -y
-    ```
+```bash
+# 1. Clone vào workspace ROS 2
+cd ~/my_ros2_ws
+git clone https://github.com/p1tl0rd/antigravity-ros2-skills.git .
 
-5.  **Restart IDE:**
-    Khởi động lại Antigravity/Cursor để IDE nhận diện `.agent` và MCP Servers.
+# 2. Cài Dependencies
+pip install -r requirements.txt
 
-## Features Included
-*   **Rules**: Quy tắc kiến trúc (Architecture), Code Style (C++/Python).
-*   **Skills**: 
-    *   `ros2_package_scaffolder`: Tạo gói chuẩn.
-    *   `ros2_build_master`: Build thông minh.
-    *   `lifecycle_operator`: Quản lý node.
-*   **Workflows**: CI/CD local, Clean Workspace.
-*   **MCP Servers**: ROS 2 Context Provider (Node graph realtime).
+# 3. Khởi tạo Linter Configs
+python3 src/tools/setup_linter.py
+
+# 4. Cài ROS 2 Dependencies (trong workspace có code)
+rosdep install --from-paths src --ignore-src -r -y
+
+# 5. Restart IDE
+```
+
+## ✨ Tính Năng
+
+### Rules (Quy tắc)
+| Rule | Mô tả |
+|:-----|:------|
+| `ros2-architecture` | Build type, Component, Dependency |
+| `ros2-cpp-style` | OOP, Naming, Memory Management |
+| `ros2-python-style` | PEP 8, Node Structure, Entry Points |
+| `technical-standards` | Type Safety, Error Handling (Language-agnostic) |
+
+### Skills (Kỹ năng)
+| Skill | Mô tả |
+|:------|:------|
+| `ros2_package_scaffolder` | Tạo gói ROS 2 chuẩn |
+| `ros2_build_master` | Build thông minh với Colcon |
+| `lifecycle_operator` | Quản lý Lifecycle Nodes |
+| `ros-expert` | Debug TF2, Topics, Services |
+| `code-review` | Review 6 khía cạnh chất lượng |
+| `git-expert` | Conflict, Branching, Hooks |
+
+### Workflows (Quy trình)
+| Workflow | Mô tả |
+|:---------|:------|
+| `/ci-local-pipeline` | CI/CD cục bộ (Lint, Build, Test) |
+| `/clean-init` | Reset workspace |
+| `/install-ros2` | Cài đặt ROS 2 Humble |
+| `/universal-request` | CONSULT/BUILD/DEBUG/OPTIMIZE |
+
+## 🔄 CI/CD
+
+Repository này có sẵn GitHub Actions CI:
+- **Trigger**: Push/PR to `main`
+- **Tests**: `flake8`, `cpplint`, `pep257`
+- **Container**: `ros:humble-ros-base`
+
+## 📄 License
+
+Apache-2.0

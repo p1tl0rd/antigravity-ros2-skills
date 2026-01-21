@@ -27,9 +27,8 @@ src/*
 !src/tools/context_provider.py
 
 # GeneratedConfigFiles (Track these as templates or let setup script generate them? 
-# Let's ignore them so they are generated fresh by setup script, preventing conflict)
-setup.cfg
-.clang-format
+# Let's ignore setup.cfg per-package but track the root .clang-format)
+
 
 # System
 .DS_Store

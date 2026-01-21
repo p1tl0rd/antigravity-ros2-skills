@@ -1,0 +1,37 @@
+name: ROS 2 CI Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-22.04
+    container:
+      image: ros:humble-ros-base
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        run: |
+          apt-get update
+          apt-get install -y python3-pip python3-colcon-common-extensions
+          pip3 install -r requirements.txt || true
+          rosdep update
+          rosdep install --from-paths src --ignore-src -r -y || true
+
+      - name: Build Workspace
+        run: |
+          source /opt/ros/humble/setup.bash
+          colcon build --symlink-install
+
+      - name: Run Linting Tests
+        run: |
+          source /opt/ros/humble/setup.bash
+          source install/setup.bash
+          colcon test --ctest-args -R "flake8|cpplint|pep257"
+          colcon test-result --all
