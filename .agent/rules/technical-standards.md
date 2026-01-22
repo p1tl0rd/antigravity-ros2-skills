@@ -41,8 +41,21 @@ Technical standards applied to all source code.
 *   **Structured Logging:** Include context (Node Name, Component ID, Input Params).
 *   **Fail Fast:** Report errors immediately rather than propagating corrupted state.
 
-## 5. Comments & Documentation
+## 5. Clean Code Principles
+*   **KISS (Keep It Simple, Stupid):** Ưu tiên giải pháp đơn giản nhất. Tránh over-engineering.
+*   **DRY (Don't Repeat Yourself):** Tách logic lặp lại thành hàm hoặc lớp dùng chung.
+*   **YAGNI (You Aren't Gonna Need It):** Không viết tính năng "để dành" cho tương lai.
 
-*   **Why > What:** Explain the intent and "Why", not just the syntax.
-*   **TODO/FIXME:** Mark incomplete work clearly.
-*   **Docstrings:** Required for all public API methods and classes.
+## 6. Modern Patterns (Immutability & Async)
+*   **Immutability:** Ưu tiên dữ liệu bất biến giảm thiểu side-effects.
+    *   Python: Dùng `Tuple` thay vì `List` nếu không cần sửa đổi.
+    *   C++: Sử dụng `const` ở mọi nơi có thể (const arguments, const methods).
+*   **Async/Await (Python Nodes):**
+    *   Không dùng `time.sleep()` trong callback (gây chặn luồng).
+    *   Dùng `await` cho các tác vụ I/O bound (gọi Service/Action Client).
+    *   Tận dụng `rclpy.task.Future` thay vì polling vòng lặp.
+
+## 7. Comments & Documentation
+*   **Function Naming:** Sử dụng pattern `Verb-Noun` (e.g., `calculate_velocity`, `validate_sensor_data`).
+*   **Why > What:** Giải thích TẠI SAO làm vậy, không giải thích cú pháp.
+*   **Docstrings:** Bắt buộc cho public API (tuân thủ PEP 257 / Doxygen).
