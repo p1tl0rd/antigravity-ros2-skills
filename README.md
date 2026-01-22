@@ -99,30 +99,30 @@ Rules được tự động kích hoạt dựa trên file đang mở. Agent sẽ
 | **ros2-python-style** | `*.py` | PEP 8. Node phải kế thừa `rclpy.node.Node`. Entry point chuẩn. |
 | **technical-standards** | Luôn bật | KISS, DRY, YAGNI. Type Safety. Error Handling. Async best practices. |
 
-### 🛠️ Skills (Kỹ năng - Gọi khi cần)
-Skills là "chuyên gia" mà bạn có thể triệu hồi bằng cách yêu cầu Agent sử dụng.
+### 🛠️ Skills (Năng Lực Chuyên Sâu)
+Tập hợp các năng lực chuyên môn giúp Agent **tự động** giải quyết các tác vụ phức tạp tối ưu nhất.
 
-| Skill | Mô tả | Khi nào dùng |
-|:------|:------|:-------------|
-| **ros2_package_scaffolder** | Tạo package ROS 2 chuẩn (C++/Python/Interface) | Khi bắt đầu package mới |
-| **ros2_build_master** | Quản lý build với Colcon (options tối ưu) | Khi cần build nâng cao |
-| **lifecycle_operator** | Điều khiển Lifecycle Nodes (configure, activate, etc.) | Khi làm việc với hardware drivers |
-| **ros-expert** | Debug TF2, Topics, Services, QoS | Khi robot "không chạy" |
-| **tdd-ros2** | Test-Driven Development với GTest/Pytest | Khi viết tính năng mới |
-| **ros2-build-resolver** | Sửa lỗi CMake, linking, dependency | Khi `colcon build` thất bại |
-| **system-architect** | Thiết kế Node graph, QoS, Namespace | Khi setup hệ thống mới |
-| **code-review** | Review 6 khía cạnh: Architecture, Security, Performance... | Trước khi merge PR |
-| **git-expert** | Giải quyết merge conflict, branching | Khi làm việc nhóm |
+| Skill | Chức năng | Ngữ cảnh tự động kích hoạt |
+|:------|:----------|:---------------------------|
+| **ros2_package_scaffolder** | Tạo package ROS 2 chuẩn (C++/Python/Interface) | Khi bạn nhờ tạo package mới |
+| **ros2_build_master** | Quản lý build với Colcon (options tối ưu) | Khi thực hiện build workspace |
+| **lifecycle_operator** | Điều khiển Lifecycle Nodes (configure, activate, etc.) | Khi setup hoặc test hardware drivers |
+| **ros-expert** | Debug TF2, Topics, Services, QoS | Khi phân tích lỗi runtime/communication |
+| **tdd-ros2** | Test-Driven Development với GTest/Pytest | Khi viết unit test hoặc tính năng mới |
+| **ros2-build-resolver** | Sửa lỗi CMake, linking, dependency | Khi phát hiện lỗi build (`colcon build` fail) |
+| **system-architect** | Thiết kế Node graph, QoS, Namespace | Khi thiết kế hệ thống/architecture |
+| **code-review** | Review 6 khía cạnh: Architecture, Security, Performance... | Khi bạn yêu cầu kiểm tra code/PR |
+| **git-expert** | Giải quyết merge conflict, branching | Khi gặp xung đột Git |
 
-### 🔄 Workflows (Quy trình - Slash Commands)
-Workflows là các quy trình step-by-step được kích hoạt bằng `/command`.
+### 🔄 Workflows (Quy Trình Chuẩn)
+Các quy trình đã được chuẩn hóa để đảm bảo tính nhất quán. Bạn có thể yêu cầu chạy quy trình này hoặc dùng phím tắt.
 
-| Command | Mô tả |
-|:--------|:------|
+| Command | Chức năng |
+|:--------|:----------|
 | `/ci-local-pipeline` | Chạy CI/CD cục bộ: rosdep → lint → build → test |
-| `/clean-init` | Xóa build artifacts, reset workspace |
+| `/clean-init` | Xóa build artifacts, reset workspace về trạng thái sạch |
 | `/install-ros2` | Hướng dẫn cài đặt ROS 2 Humble trên Ubuntu 22.04 |
-| `/universal-request` | Phân loại request (CONSULT/BUILD/DEBUG/OPTIMIZE) và xử lý phù hợp |
+| `/universal-request` | Quy trình tiếp nhận yêu cầu chuẩn (CONSULT → BUILD → DEBUG) |
 
 ### 🧰 Tools (Scripts hỗ trợ)
 Scripts Python nằm trong `src/tools/`.
