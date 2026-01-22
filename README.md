@@ -42,27 +42,30 @@ Khởi động lại IDE (Cursor/VSCode) để nhận diện thư mục `.agent`
 
 ---
 
-## 🚀 Sử Dụng Trong Dự Án ROS 2
+## 🚀 Hướng Dẫn Sử Dụng
 
-### Tạo Package Mới (Sử dụng Skill)
-Gõ vào AI Chat:
-```
-Sử dụng skill ros2_package_scaffolder để tạo package Python tên "my_robot_driver" với node "driver_node"
-```
+**Nguyên tắc cốt lõi**: Bạn cứ giao tiếp tự nhiên, Agent sẽ tự động chọn công cụ phù hợp.
 
-### Build Workspace (Sử dụng Workflow)
-Gõ `/ci-local-pipeline` trong AI Chat hoặc chạy thủ công:
-```bash
-colcon build --symlink-install
-colcon test
-colcon test-result --all
-```
+### 1. Giao Tiếp Tự Nhiên (Khuyên dùng)
+Bạn không cần nhớ tên Skill hay Rule. Chỉ cần mô tả mục tiêu:
 
-### Debug Build Errors (Sử dụng Skill)
-Khi gặp lỗi build, gõ:
-```
-Sử dụng skill ros2-build-resolver để fix lỗi: <paste error message>
-```
+*   *"Tạo cho tôi một package Python để điều khiển động cơ qua cổng Serial."*
+    → Agent tự kích hoạt `ros2_package_scaffolder`.
+*   *"Code này nhìn rối quá, review giúp tôi."*
+    → Agent tự dùng `code-review`.
+*   *"Build lỗi rồi, fix đi."*
+    → Agent tự dùng `ros2-build-resolver`.
+
+### 2. Quy Tắc Tự Động (Automation)
+Bạn không cần nhắc Agent tuân thủ chuẩn. Chỉ cần viết code, Agent sẽ tự động:
+*   ✅ Áp dụng OOP cho Node (theo `ros2-architecture`).
+*   ✅ Format code chuẩn PEP 8 / Google Style.
+*   ✅ Thêm Docstring và Type Hinting.
+
+### 3. Power Users (Slash Commands)
+Nếu muốn đi tắt đón đầu, bạn có thể dùng lệnh:
+*   `/ci-local-pipeline`: Chạy full bộ test.
+*   `/clean-init`: Xóa sạch workspace làm lại từ đầu.
 
 ---
 
