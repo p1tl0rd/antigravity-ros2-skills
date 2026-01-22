@@ -1,171 +1,171 @@
 # Antigravity ROS 2 Skills
 
-🚀 Bộ cấu hình "Agent-First" biến IDE của bạn thành môi trường phát triển Robot chuyên nghiệp với AI Agents (Google Gemini, Claude, Cursor, etc.).
+🚀 The "Agent-First" configuration that transforms your IDE into a professional Robotics development environment powered by AI Agents (Google Gemini, Claude, Cursor, etc.).
 
 ---
 
-## 📦 Cài Đặt
+## 📦 Installation
 
-### Bước 1: Clone vào ROS 2 Workspace
+### Step 1: Clone into ROS 2 Workspace
 ```bash
-# Tạo workspace mới (hoặc dùng workspace có sẵn)
+# Create a new workspace (or use an existing one)
 mkdir -p ~/ros2_ws/src
 cd ~/ros2_ws
 
-# Clone repository vào ROOT của workspace (không phải /src)
+# Clone the repository into the ROOT of your workspace (not inside /src)
 git clone https://github.com/p1tl0rd/antigravity-ros2-skills.git .
 ```
 
-### Bước 2: Cài đặt Python Dependencies
+### Step 2: Install Python Dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-### Bước 3: Khởi tạo Linter Configs
+### Step 3: Initialize Linter Configs
 ```bash
 python3 src/tools/setup_linter.py
 ```
-> Script này sẽ tạo `setup.cfg` (Flake8) và `.clang-format` (C++) ở thư mục gốc.
+> This script generates `setup.cfg` (Flake8) and `.clang-format` (C++) in the root directory.
 
-### Bước 4: Cài đặt ROS 2 Dependencies
+### Step 4: Install ROS 2 Dependencies
 ```bash
-# Khởi tạo rosdep (nếu chưa có)
-sudo rosdep init  # Bỏ qua nếu đã chạy trước đó
+# Initialize rosdep (if not already done)
+sudo rosdep init
 rosdep update
 
-# Cài dependencies cho các package trong src/
+# Install dependencies for packages in src/
 rosdep install --from-paths src --ignore-src -r -y
 ```
 
-### Bước 5: Restart IDE
-Khởi động lại IDE (Cursor/VSCode) để nhận diện thư mục `.agent` và MCP Servers.
+### Step 5: Restart IDE
+Restart your IDE (Cursor/VSCode) to load the `.agent` directory and MCP Servers.
 
 ---
 
-## 🚀 Hướng Dẫn Sử Dụng
+## 🚀 Usage Guide
 
-**Nguyên tắc cốt lõi**: Bạn cứ giao tiếp tự nhiên, Agent sẽ tự động chọn công cụ phù hợp.
+**Core Principle**: Communicate naturally. The Agent is proactive and will automatically select the appropriate tool for the job.
 
-### 1. Giao Tiếp Tự Nhiên (Khuyên dùng)
-Bạn không cần nhớ tên Skill hay Rule. Chỉ cần mô tả mục tiêu:
+### 1. Natural Interaction (Recommended)
+You don't need to remember Skill or Rule names. Just describe your goal:
 
-*   *"Tạo cho tôi một package Python để điều khiển động cơ qua cổng Serial."*
-    → Agent tự kích hoạt `ros2_package_scaffolder`.
-*   *"Code này nhìn rối quá, review giúp tôi."*
-    → Agent tự dùng `code-review`.
-*   *"Build lỗi rồi, fix đi."*
-    → Agent tự dùng `ros2-build-resolver`.
+*   *"Create a Python package to control a motor via Serial."*
+    → Agent automatically activates `ros2_package_scaffolder`.
+*   *"This code looks checks, review it for me."*
+    → Agent automatically uses `code-review`.
+*   *"Build failed, please fix it."*
+    → Agent automatically uses `ros2-build-resolver`.
 
-### 2. Quy Tắc Tự Động (Automation)
-Bạn không cần nhắc Agent tuân thủ chuẩn. Chỉ cần viết code, Agent sẽ tự động:
-*   ✅ Áp dụng OOP cho Node (theo `ros2-architecture`).
-*   ✅ Format code chuẩn PEP 8 / Google Style.
-*   ✅ Thêm Docstring và Type Hinting.
+### 2. Automated Rules (Zero-Config)
+You don't need to remind the Agent to follow standards. Just write code, and the Agent will automatically:
+*   ✅ Apply OOP for Nodes (per `ros2-architecture`).
+*   ✅ Format code to PEP 8 / Google Style standards.
+*   ✅ Add Docstrings and Type Hinting.
 
 ### 3. Power Users (Slash Commands)
-Nếu muốn đi tắt đón đầu, bạn có thể dùng lệnh:
-*   `/ci-local-pipeline`: Chạy full bộ test.
-*   `/clean-init`: Xóa sạch workspace làm lại từ đầu.
+If you prefer explicit commands, you can use workflows:
+*   `/ci-local-pipeline`: Run the full local CI/CD pipeline.
+*   `/clean-init`: Wipe build artifacts and reset the workspace.
 
 ---
 
-## 📋 Cấu Trúc Repository
+## 📋 Repository Structure
 
 ```
 antigravity-ros2-skills/
 ├── .agent/                    # 🧠 Agent Configuration
-│   ├── rules/                 # Quy tắc code style (luôn bật)
-│   ├── skills/                # Kỹ năng chuyên biệt (gọi khi cần)
-│   └── workflows/             # Quy trình step-by-step (slash commands)
+│   ├── rules/                 # Code Style Rules (Always active)
+│   ├── skills/                # Specialized Capabilities (Context-aware)
+│   └── workflows/             # Standard Procedures (Slash commands)
 ├── .github/workflows/         # 🔄 GitHub Actions CI/CD
-├── src/tools/                 # 🛠️ Scripts hỗ trợ
-├── templates/                 # 📄 Mẫu tham khảo
-├── mcp_servers.json           # MCP Server config
-├── requirements.txt           # Python dependencies
+├── src/tools/                 # 🛠️ Helper Scripts
+├── templates/                 # 📄 Reference Templates
+├── mcp_servers.json           # MCP Server Config
+├── requirements.txt           # Python Dependencies
 └── README.md
 ```
 
 ---
 
-## � Chi Tiết Các Thành Phần
+## 📖 Component Details
 
-### 📐 Rules (Quy tắc - Tự động áp dụng)
-Rules được tự động kích hoạt dựa trên file đang mở. Agent sẽ tuân thủ các quy tắc này khi viết code.
+### 📐 Rules (Always Active)
+Rules are automatically enforced based on the active file context.
 
-| Rule | Trigger | Mô tả |
-|:-----|:--------|:------|
-| **ros2-architecture** | Luôn bật | Phân tách Build Type (C++/Python/Interface). Yêu cầu Component-based Design. |
-| **ros2-cpp-style** | `*.cpp`, `*.hpp`, `*.h` | OOP bắt buộc. Naming conventions (`snake_case` method, `member_` variables). Không dùng `new/delete`. |
-| **ros2-python-style** | `*.py` | PEP 8. Node phải kế thừa `rclpy.node.Node`. Entry point chuẩn. |
-| **technical-standards** | Luôn bật | KISS, DRY, YAGNI. Type Safety. Error Handling. Async best practices. |
+| Rule | Trigger | Description |
+|:-----|:--------|:------------|
+| **ros2-architecture** | Global | Segregates Build Types (C++/Python/Interface). Enforces Component-based Design. |
+| **ros2-cpp-style** | `*.cpp`, `*.hpp` | Strict OOP. Naming conventions (`snake_case` methods, `member_` vars). No `new/delete`. |
+| **ros2-python-style** | `*.py` | PEP 8. Nodes must inherit `rclpy.node.Node`. Standard entry points. |
+| **technical-standards** | Global | KISS, DRY, YAGNI. Type Safety. Error Handling. Async best practices. |
 
-### 🛠️ Skills (Năng Lực Chuyên Sâu)
-Tập hợp các năng lực chuyên môn giúp Agent **tự động** giải quyết các tác vụ phức tạp tối ưu nhất.
+### 🛠️ Skills (Specialized Capabilities)
+Capabilities that the Agent automatically activates to solve complex tasks.
 
-| Skill | Chức năng | Ngữ cảnh tự động kích hoạt |
-|:------|:----------|:---------------------------|
-| **ros2_package_scaffolder** | Tạo package ROS 2 chuẩn (C++/Python/Interface) | Khi bạn nhờ tạo package mới |
-| **ros2_build_master** | Quản lý build với Colcon (options tối ưu) | Khi thực hiện build workspace |
-| **lifecycle_operator** | Điều khiển Lifecycle Nodes (configure, activate, etc.) | Khi setup hoặc test hardware drivers |
-| **ros-expert** | Debug TF2, Topics, Services, QoS | Khi phân tích lỗi runtime/communication |
-| **tdd-ros2** | Test-Driven Development với GTest/Pytest | Khi viết unit test hoặc tính năng mới |
-| **ros2-build-resolver** | Sửa lỗi CMake, linking, dependency | Khi phát hiện lỗi build (`colcon build` fail) |
-| **system-architect** | Thiết kế Node graph, QoS, Namespace | Khi thiết kế hệ thống/architecture |
-| **code-review** | Review 6 khía cạnh: Architecture, Security, Performance... | Khi bạn yêu cầu kiểm tra code/PR |
-| **git-expert** | Giải quyết merge conflict, branching | Khi gặp xung đột Git |
+| Skill | Function | Automatic Activation Context |
+|:------|:---------|:-----------------------------|
+| **ros2_package_scaffolder** | Create standard ROS 2 packages | When asking to create a new package |
+| **ros2_build_master** | Smart build management with Colcon | When running workspace builds |
+| **lifecycle_operator** | Manage Lifecycle Nodes | When configuring or testing hardware drivers |
+| **ros-expert** | Debug TF2, Topics, Services, QoS | When analyzing runtime/communication issues |
+| **tdd-ros2** | Test-Driven Development (GTest/Pytest) | When writing unit tests or new features |
+| **ros2-build-resolver** | Fix CMake, linking, dependency errors | When `colcon build` fails |
+| **system-architect** | Design Node graphs, QoS, Namespaces | When designing system architecture |
+| **code-review** | 6-Aspect Review (Arch, Security, Perf...) | When asking for code/PR review |
+| **git-expert** | Resolve merge conflicts, branching | When handling Git operations |
 
-### 🔄 Workflows (Quy Trình Chuẩn)
-Các quy trình đã được chuẩn hóa để đảm bảo tính nhất quán. Bạn có thể yêu cầu chạy quy trình này hoặc dùng phím tắt.
+### 🔄 Workflows (Standard Procedures)
+Standardized procedures ensuring consistency. Can be triggered via Slash Commands.
 
-| Command | Chức năng |
-|:--------|:----------|
-| `/ci-local-pipeline` | Chạy CI/CD cục bộ: rosdep → lint → build → test |
-| `/clean-init` | Xóa build artifacts, reset workspace về trạng thái sạch |
-| `/install-ros2` | Hướng dẫn cài đặt ROS 2 Humble trên Ubuntu 22.04 |
-| `/universal-request` | Quy trình tiếp nhận yêu cầu chuẩn (CONSULT → BUILD → DEBUG) |
+| Command | Function |
+|:--------|:---------|
+| `/ci-local-pipeline` | Run local CI/CD: rosdep → lint → build → test |
+| `/clean-init` | Clean build artifacts, reset workspace |
+| `/install-ros2` | Install ROS 2 Humble on Ubuntu 22.04 |
+| `/universal-request` | Standard request handling (CONSULT → BUILD → DEBUG) |
 
-### 🧰 Tools (Scripts hỗ trợ)
-Scripts Python nằm trong `src/tools/`.
+### 🧰 Tools (Helper Scripts)
+Python scripts located in `src/tools/`.
 
-| Tool | Mô tả | Cách chạy |
-|:-----|:------|:----------|
-| **setup_linter.py** | Tạo `setup.cfg` (Flake8) và `.clang-format` | `python3 src/tools/setup_linter.py` |
-| **context_provider.py** | MCP Server cung cấp ROS 2 graph info cho Agent | Tự động qua `mcp_servers.json` |
+| Tool | Description | Usage |
+|:-----|:------------|:------|
+| **setup_linter.py** | Generates `setup.cfg` & `.clang-format` | `python3 src/tools/setup_linter.py` |
+| **context_provider.py** | MCP Server for ROS 2 graph info | Automated via `mcp_servers.json` |
 
 ---
 
 ## 🔄 CI/CD Pipeline
 
-Repository có sẵn GitHub Actions (`.github/workflows/ros2_ci.yml`):
+Includes GitHub Actions configuration (`.github/workflows/ros2_ci.yml`):
 
-| Stage | Tool | Mô tả |
-|:------|:-----|:------|
-| Build | `colcon build` | Biên dịch tất cả packages |
-| Lint (ROS 2) | `ament_flake8`, `ament_cpplint`, `ament_pep257` | Code style theo chuẩn ROS |
-| Static Analysis | `cppcheck` | Phát hiện bugs C++ tiềm ẩn |
-| Type Check | `mypy` | Kiểm tra kiểu dữ liệu Python |
+| Stage | Tool | Description |
+|:------|:-----|:------------|
+| Build | `colcon build` | Compiles all packages |
+| Lint (ROS 2) | `ament_flake8`, `ament_cpplint` | Checks code against ROS standards |
+| Static Analysis | `cppcheck` | Detects C++ bugs and performance issues |
+| Type Check | `mypy` | Verifies Python type safety |
 
-**Trigger:** Push hoặc Pull Request vào branch `main`.
+**Trigger:** Push or Pull Request to `main`.
 
 ---
 
 ## 📄 Templates
 
-Các mẫu tham khảo trong `templates/`:
+Reference examples in `templates/`:
 
-| Path | Mô tả |
-|:-----|:------|
-| `templates/launch/example.launch.py` | Launch file mẫu với Standard Node + Lifecycle Node |
+| Path | Description |
+|:-----|:------------|
+| `templates/launch/example.launch.py` | Launch file with Standard Node + Lifecycle Node pattern |
 
 ---
 
-## 🤝 Đóng Góp
+## 🤝 Contributing
 
-1. Fork repository
-2. Tạo branch: `git checkout -b feature/my-feature`
-3. Commit changes: `git commit -m "feat: Add my feature"`
-4. Push: `git push origin feature/my-feature`
-5. Mở Pull Request
+1. Fork the repository
+2. Create your branch: `git checkout -b feature/my-feature`
+3. Commit your changes: `git commit -m "feat: Add my feature"`
+4. Push to the branch: `git push origin feature/my-feature`
+5. Open a Pull Request
 
 ---
 
